@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  email       String    @unique
+  password    String
+  name        String?
+  avatarUrl   String?
+  dateOfBirth DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bio         String?
+  location    String?
+  likes       Like[]
+  comments    Comment[]
+  isAdmin Boolean @default(false)
+}
+
+model Book {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  annotation   String?
+  author    Author @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+  likes     Like[]
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+}
+
+model Author {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  avatarUrl   String?
+  books Book[]
+}
+
+model Like {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+  book   Book   @relation(fields: [bookId], references: [id])
+  bookId String @db.ObjectId
+}
+
+model Comment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @db.ObjectId
+  book    Book   @relation(fields: [bookId], references: [id])
+  bookId  String @db.ObjectId
+}
