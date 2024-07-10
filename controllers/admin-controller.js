@@ -27,6 +27,7 @@ const AdminController = {
   },
 
   deleteBook: async (req, res) => {
+    if
     const { id } = req.params;
     const userId = req.user.userId;
     // Проверка, что пользователь удаляет свой пост
