@@ -1,5 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const UserController = require("../controllers/user-controller");
+const BookController = require("../controllers/book-controller");
+const LikeController = require("../controllers/like-controller");
+const CommentController = require("../controllers/comment-controller");
+const AdminController = require("../controllers/admin-controller");
+const { authenticateToken } = require("../middleware/auth");
 const multer = require("multer");
 
 const uploadDestination = "uploads";

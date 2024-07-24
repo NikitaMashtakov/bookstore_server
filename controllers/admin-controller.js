@@ -27,30 +27,27 @@ const AdminController = {
   },
 
   deleteBook: async (req, res) => {
-    if
-    const { id } = req.params;
-    const userId = req.user.userId;
-    // Проверка, что пользователь удаляет свой пост
-    const book = await prisma.book.findUnique({ where: { id } });
+    if (req.user.isAdmin) {
+      const { id } = req.params;
+      // Проверка, что пользователь удаляет свой пост
+      const book = await prisma.book.findUnique({ where: { id } });
 
-    if (!book) {
-      return res.status(404).json({ error: "Пост не найден" });
-    }
+      if (!book) {
+        return res.status(404).json({ error: "Книга не найдена" });
+      }
 
-    if (userId == false) {
+      try {
+        const transaction = await prisma.$transaction([
+          prisma.comment.deleteMany({ where: { bookId: id } }),
+          prisma.like.deleteMany({ where: { bookId: id } }),
+          prisma.book.delete({ where: { id } }),
+        ]);
+        res.json(transaction);
+      } catch (error) {
+        res.status(500).json({ error: "Что-то пошло не так" });
+      }
+    } else {
       return res.status(403).json({ error: "Нет доступа" });
-    }
-
-    try {
-      const transaction = await prisma.$transaction([
-        prisma.comment.deleteMany({ where: { bookId: id } }),
-        prisma.like.deleteMany({ where: { bookId: id } }),
-        prisma.book.delete({ where: { id } }),
-      ]);
-
-      res.json(transaction);
-    } catch (error) {
-      res.status(500).json({ error: "Что-то пошло не так" });
     }
   },
 };
