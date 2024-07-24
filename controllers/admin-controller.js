@@ -52,4 +52,4 @@ const AdminController = {
   },
 };
 
-module.export = AdminController;
+module.exports = AdminController;

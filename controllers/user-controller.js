@@ -1,10 +1,11 @@
-const { prisma } = require("../prisma/prisma-client");
 const bcrypt = require("bcryptjs");
 const Jdenticon = require("jdenticon");
 const path = require("path");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config;
+const { prisma } = require("../prisma/prisma-client");
+
 const UserController = {
   register: async (req, res) => {
     const { email, password, name } = req.body;

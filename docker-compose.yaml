@@ -3,15 +3,30 @@ services:
     build:
       context: ./database
       args:
-        MONGO_VERSION: 6
+        MONGO_VERSION: 4
     environment:
-      MONGO_REPLICA_HOST: localhost
-      MONGO_REPLICA_PORT: 27017
       MONGO_INITDB_ROOT_USERNAME: nikita
-      MONGO_INITDB_ROOT_PASSWORD: pasword
+      MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: mydatabase
+      MONGO_REPLICA_HOST: 127.0.0.1
+      MONGO_REPLICA_PORT: 27017
       # Use "mongo" instead of "mongosh" before v5.0
-      MONGO_COMMAND: "mongosh"
+      MONGO_COMMAND: "mongo"
     ports:
       - "27017:27017"
-    restart: always
+    # restart: unless-stopped
+    # healthcheck:
+    #   # Use "mongo" instead of "mongosh" before v5.0
+    #   test:
+    #     [
+    #       "CMD",
+    #       "mongosh",
+    #       "admin",
+    #       "--port",
+    #       "27017",
+    #       "--eval",
+    #       "db.adminCommand('ping').ok",
+    #     ]
+    #   interval: 60s
+    #   timeout: 2s
+    #   retries: 20

@@ -22,7 +22,7 @@ const upload = multer({ storage: storage });
 // Роуты User
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
-router.get("/current", authenticateToken, UserController.current);
+router.get("/current", authenticateToken, UserController.currentUser);
 router.get("/users/:id", authenticateToken, UserController.getUserById);
 router.put(
   "/users/:id",
@@ -36,7 +36,7 @@ router.get("/books", authenticateToken, BookController.getAllBooks);
 router.get("/books/:id", authenticateToken, BookController.getBookById);
 
 //Роуты Admin
-router.post("/books", authenticateToken, AdminControllerController.createBook);
+router.post("/books", authenticateToken, AdminController.createBook);
 router.delete("/books/:id", authenticateToken, AdminController.deleteBook);
 
 // Роуты лайков
