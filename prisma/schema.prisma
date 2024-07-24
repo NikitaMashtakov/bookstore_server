@@ -20,25 +20,25 @@ model User {
   location    String?
   likes       Like[]
   comments    Comment[]
-  isAdmin Boolean @default(false)
+  isAdmin     Boolean   @default(false)
 }
 
 model Book {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  annotation   String?
-  author    Author @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
-  likes     Like[]
-  comments  Comment[]
-  createdAt DateTime  @default(now())
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  annotation String?
+  author     Author    @relation(fields: [authorId], references: [id])
+  authorId   String    @db.ObjectId
+  likes      Like[]
+  comments   Comment[]
+  createdAt  DateTime  @default(now())
 }
 
 model Author {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  avatarUrl   String?
-  books Book[]
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  avatarUrl String?
+  books     Book[]
 }
 
 model Like {

@@ -10,17 +10,45 @@ const multer = require("multer");
 
 const uploadDestination = "uploads";
 
+// Показываем, где хранить загружаемые файлы
 const storage = multer.diskStorage({
   destination: uploadDestination,
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
   },
 });
 
-const uploads = multer({ storage: storage });
+const upload = multer({ storage: storage });
+// Роуты User
+router.post("/register", UserController.register);
+router.post("/login", UserController.login);
+router.get("/current", authenticateToken, UserController.current);
+router.get("/users/:id", authenticateToken, UserController.getUserById);
+router.put(
+  "/users/:id",
+  authenticateToken,
+  upload.single("avatar"),
+  UserController.updateUser
+);
 
-router.get("/register", (req, res) => {
-  res.send("register");
-});
+// Роуты Book
+router.get("/books", authenticateToken, BookController.getAllBooks);
+router.get("/books/:id", authenticateToken, BookController.getBookById);
+
+//Роуты Admin
+router.post("/books", authenticateToken, AdminControllerController.createBook);
+router.delete("/books/:id", authenticateToken, AdminController.deleteBook);
+
+// Роуты лайков
+router.post("/likes", authenticateToken, LikeController.likeBook);
+router.delete("/likes/:id", authenticateToken, LikeController.unlikeBook);
+
+// Роуты комментариев
+router.post("/comments", authenticateToken, CommentController.createComment);
+router.delete(
+  "/comments/:id",
+  authenticateToken,
+  CommentController.deleteComment
+);
 
 module.exports = router;
